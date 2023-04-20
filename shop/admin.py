@@ -4,3 +4,4 @@ from .models import Product,Category,Brand
 admin.site.register(Product)
 admin.site.register(Brand)
 admin.site.register(Category)
+#"{%url 'cart' %}"
