@@ -7,7 +7,6 @@
 
   
  .dropdown-menu {
-    color: #15a6e9;
     min-width: 3rem; /* Decrease the minimum width of the dropdown menu */
     font-size: 2rem; /* Optionally decrease the font size of the dropdown menu */
   }

@@ -50,7 +50,10 @@
     </h6>
     <hr>
     <div align="right">
+    <!--<a href="{%if user.is_authenticated  == false %}{% url 'login' %}{% endif %}">-->
+        <a href="{%if user.is_authenticated %}{% url 'add_cart' product.name %}{% else %}{% url 'login' %}{% endif %}">
         <button type="button" class="btn btn-primary">Add to cart</button>
+        </a>
     </div>
         </div>
         

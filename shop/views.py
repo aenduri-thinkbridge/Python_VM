@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Brand,Category,Product
+from .models import Brand,Category,Product,cart
 from django.contrib.auth import authenticate,login as auth_login,logout
 
 def navbar_items(request):
@@ -49,7 +49,7 @@ def login(request):
                 messages.info(request,"username or password incorrect")
     return render(request, 'login.html')
 
-@login_required(login_url="/login/")
+
 def homepage(request):
     brand = Brand.objects.all()
     category = Category.objects.all()
@@ -60,7 +60,7 @@ def homepage(request):
     context.update(navbar_items(request))
     return render(request, 'homepage.html',context)
 
-@login_required(login_url="/login/")
+
 def Brandpages(request,nm):
     brand = Brand.objects.get(name=nm)
     products = Product.objects.filter(brand=brand)
@@ -69,7 +69,7 @@ def Brandpages(request,nm):
     return render(request, 'brand.html',context)
 
 
-@login_required(login_url="/login/")
+
 def Categorypage(request,nm):
     category = Category.objects.get(name=nm)
     products = Product.objects.filter(Category=category)
@@ -77,7 +77,6 @@ def Categorypage(request,nm):
     context.update(navbar_items(request))
     return render(request, 'category.html',context)
 
-@login_required(login_url="/login/")
 def logout_view(request):
     logout(request)
     return redirect(login)
@@ -88,3 +87,20 @@ def product_view(request,nm):
     context = {'product':product}
     context.update(navbar_items(request))
     return render(request, 'product.html',context)
+
+
+def cart_view(request):
+    context = {'cart':cart}
+    context.update(navbar_items(request))
+    return render(request, 'cart.html',context)
+
+def add_cart(request,nm):
+
+    print('cart',cart )
+    print(Product.objects.get(name=nm))
+    cart.append(Product.objects.get(name=nm))
+    print(cart)
+    context = {'cart':list(set(cart))}
+    print(set(cart))
+    context.update(navbar_items(request))
+    return render(request, 'cart.html',context)

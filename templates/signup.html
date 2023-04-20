@@ -23,7 +23,11 @@
         <label for="exampleInputPassword1">Confirm Password</label>
         <input type="password" name = "confirm_password" class="form-control" id="exampleInputPassword1" placeholder="Password">
       </div>
->
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  <hr>
+  already have an account
+      <a href="{% url 'login' %}">
+        <button class="btn btn-primary">Login</button> 
+      </a>
   {% endblock %}

@@ -44,8 +44,12 @@
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
       </div>
-
-
+      <div>
+        <a class="dropdown-item" href="{%url 'cart' %}">Cart</a>
+      </div>
+      {% if user.is_authenticated %} 
+      <div>
+        {{ user.username}}
         <div class="nav-item dropdown p-3">
     
           <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,7 +62,13 @@
             <li><a class="dropdown-item" href="{% url 'logout' %}">logout</a></li>
           </ul>
         </div>
+      </div>
 
+        {% else %}
+        <div>
+         <a class="dropdown-item" href="{%url 'register' %}">Register</a>
+        </div>
+      {% endif %}
 
 
     </div>
