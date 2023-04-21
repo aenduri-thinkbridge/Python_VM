@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Brand,Category,Product,cart
+from .models import Brand,Category,Product,Cart
 from django.contrib.auth import authenticate,login as auth_login,logout
 
 def navbar_items(request):
@@ -88,19 +88,31 @@ def product_view(request,nm):
     context.update(navbar_items(request))
     return render(request, 'product.html',context)
 
-
+@login_required(login_url='login')
 def cart_view(request):
-    context = {'cart':cart}
-    context.update(navbar_items(request))
-    return render(request, 'cart.html',context)
-
-def add_cart(request,nm):
-
-    print('cart',cart )
-    print(Product.objects.get(name=nm))
-    cart.append(Product.objects.get(name=nm))
+    cart = Cart.objects.filter(user=request.user)
     print(cart)
-    context = {'cart':list(set(cart))}
-    print(set(cart))
+    total_price = sum([c.product.price * c.quantity for c in cart])
+    total_items = sum([c.quantity for c in cart])
+    context = {'cart':cart,'total_price':total_price,'total_items':total_items}
     context.update(navbar_items(request))
     return render(request, 'cart.html',context)
+@login_required
+def add_cart(request,nm):
+    product = Product.objects.get(name=nm)
+    quantity = request.POST.get('quantity',1)
+    Cart.objects.create(user= request.user, product=product, quantity=quantity)
+    return redirect('cart')
+
+@login_required
+def remove_cart(request,pk):
+    item=Cart.objects.get(id=pk)
+    item.delete()
+    return redirect('cart')
+@login_required
+def update_cart(request,pk):
+    item=Cart.objects.get(id=pk)
+    item.quantity = request.POST['quantity']
+    item.save()
+    print(item.quantity)
+    return redirect('cart')
