@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from urllib.parse import unquote
  #to remove %20 in the product name 
-
+from .models import costumers
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
@@ -116,3 +115,24 @@ def update_cart(request,pk):
     item.save()
     print(item.quantity)
     return redirect('cart')
+
+def checkout(request):
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        address = request.POST['address']
+        city = request.POST['city']
+        country = request.POST['country']
+        zipcode = request.POST['zipcode']
+        phonenumber = request.POST['phonenumber']
+        costumers.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            address=address,
+            city=city,
+            country=country,
+            zipcode=zipcode,
+            phonenumber=phonenumber
+        )
+        return redirect('checkout.html')
+    return render(request, 'checkout.html',)
