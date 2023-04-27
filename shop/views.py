@@ -117,7 +117,10 @@ def update_cart(request,pk):
     return redirect('cart')
 
 def checkout(request):
+    submitted = False
+    print('created costumer 1')
     if request.method == 'POST':
+        print('created costumer 2')
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         address = request.POST['address']
@@ -125,7 +128,8 @@ def checkout(request):
         country = request.POST['country']
         zipcode = request.POST['zipcode']
         phonenumber = request.POST['phonenumber']
-        costumers.objects.create(
+        costumer=costumers.objects.create(
+            user=request.user,
             first_name=first_name,
             last_name=last_name,
             address=address,
@@ -134,5 +138,9 @@ def checkout(request):
             zipcode=zipcode,
             phonenumber=phonenumber
         )
-        return redirect('checkout.html')
-    return render(request, 'checkout.html',)
+        submitted = True
+        costumer.save()
+        print('created costumer 3',costumer.first_name,submitted)
+        context = {'costumer':costumer,'submitted':submitted}
+        return render(request,'checkout.html', context)
+    return render(request, 'checkout.html',{'submitted':submitted})
