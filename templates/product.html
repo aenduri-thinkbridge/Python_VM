@@ -1,26 +1,46 @@
 {%extends 'base.html'%}
 
 {% block content %}
-<div class="row">
-    <div class="col-md">
-       <div class="card text-bg-light mb-3" style="width: 15rem;">
-            <img  src = '{{product.image.url}}' class="card-img-top" alt="..." > 
-        <div class="card-body">
-            <h5 class="card-text">{{product.name}}</h5>
-    <h6 class="card-text">
-        <small class="text-body-secondary">
-            {{product.price}}
-        </small>
-    </h6>
-    <hr>
-    <div align="right">
-        <button type="button" class="btn btn-primary">Add to cart</button>
-    </div>
+<body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="{{product.image.url}}" alt="Product Image" class="img-fluid">
         </div>
-        
+        <div class="col-md-6">
+          <h1>{{product.name}}</h1>
+          <p class="lead">The Beats Studio Buds are true wireless earbuds that provide exceptional sound quality and advanced features for a premium listening experience. With active noise cancellation (ANC) and transparency mode, you can choose to block out the world or stay aware of your surroundings.</p>
+          <p><strong>Price:</strong> {{product.price}}</p>
+          <form method = 'POST' action ="{%url 'add_cart' product.name %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="quantity">{{product.quantity}}</label>
+              <input type="number" class="form-control" id="quantity" name="quantity" min="1" value="1">
+            </div>
+            <a href="{%if user.is_authenticated %}{% url 'add_cart' product.name %}{% else %}{% url 'login' %}{% endif %}">
+                <button type="submit" class="btn btn-primary">Add to cart</button>
+                </a>
+          </form>
+          <hr>
+          <h2>Product Details</h2>
+          <ul>
+            <li><strong>Brand:</strong> Beats</li>
+            <li><strong>Model:</strong> Studio Buds</li>
+            <li><strong>Type:</strong> True Wireless Earbuds</li>
+            <li><strong>Colors:</strong> Black, White, Red</li>
+            <li><strong>Connectivity:</strong> Bluetooth 5.2</li>
+            <li><strong>Compatibility:</strong> iOS and Android devices</li>
+            <li><strong>Noise Cancellation:</strong> Active Noise Cancellation (ANC)</li>
+            <li><strong>Transparency Mode:</strong> Yes</li>
+            <li><strong>Battery Life:</strong> Up to 8 hours with ANC off, up to 5 hours with ANC on; up to 24 hours with charging case (ANC off), up to 15 hours with charging case (ANC on)</li>
+            <li><strong>Charging:</strong> USB-C with Fast Fuel (5 minutes of charging gives 1.5 hours of playback)</li>
+            <li><strong>Controls:</strong> Touch controls for playback, calls, and voice assistant; sensors for ear detection and automatic play/pause</li>
+            <li><strong>Additional Features:</strong> IPX4 water and sweat resistance, Find My compatibility, support for Siri and Google Assistant</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  </body>
 
 
 {% endblock %}

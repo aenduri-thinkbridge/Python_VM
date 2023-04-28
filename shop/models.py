@@ -26,7 +26,7 @@ class Product(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,default=None)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f'{self.quantity} x {self.product}'

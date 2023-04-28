@@ -90,7 +90,6 @@ def product_view(request,nm):
 @login_required(login_url='login')
 def cart_view(request):
     cart = Cart.objects.filter(user=request.user)
-    print(cart)
     total_price = sum([c.product.price * c.quantity for c in cart])
     total_items = sum([c.quantity for c in cart])
     context = {'cart':cart,'total_price':total_price,'total_items':total_items}
@@ -99,8 +98,24 @@ def cart_view(request):
 @login_required
 def add_cart(request,nm):
     product = Product.objects.get(name=nm)
-    quantity = request.POST.get('quantity',1)
-    Cart.objects.create(user= request.user, product=product, quantity=quantity)
+    cart = Cart.objects.filter(user=request.user)
+    value = 1
+    print("val",type(value))
+    cart2 = Cart.objects.get(user=request.user,product=product)
+    print(type(cart2.quantity))
+    if request.method == 'POST':
+            print("val2",type(value))
+            value = int(request.POST.get('quantity'))
+            print("value:",value)
+    products = [item.product for item in cart]
+    if product not in products:
+        quantity = product.quantity + value
+        Cart.objects.create(user= request.user, product=product,quantity= quantity)
+    else:
+        cart = Cart.objects.get(user=request.user,product=product)
+        print(type(cart.quantity),type(value))
+        cart.quantity+= value
+        cart.save()
     return redirect('cart')
 
 @login_required
@@ -118,6 +133,17 @@ def update_cart(request,pk):
 
 def checkout(request):
     submitted = False
+    cart = Cart.objects.filter(user = request.user)
+    total_items = sum([c.quantity for c in cart])
+    total_price = sum([c.product.price * c.quantity for c in cart])
+
+    #products= []
+    #product_ids = Cart.objects.all().values_list('product', flat=True)
+    #product_items = Product.objects.filter(id__in=product_ids)
+    """"for item in cart:
+            products.append(item.product)"""
+    context={'submitted':submitted,'cart':cart,'total_items':total_items,'total_price':total_price}
+
     print('created costumer 1')
     if request.method == 'POST':
         print('created costumer 2')
@@ -143,4 +169,4 @@ def checkout(request):
         print('created costumer 3',costumer.first_name,submitted)
         context = {'costumer':costumer,'submitted':submitted}
         return render(request,'checkout.html', context)
-    return render(request, 'checkout.html',{'submitted':submitted})
+    return render(request, 'checkout.html',context)
