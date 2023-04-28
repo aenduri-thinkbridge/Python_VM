@@ -1,3 +1,20 @@
+{% for item in cart %}
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">{{item.name}}</h6>
+            <small class="text-muted">{{item.brand}}</small>
+          </div>
+          <span class="text-muted">{{item.price}}</span>
+        </li>
+        {% endfor %}
+
+
+
+
+
+
+
+
 <form class="needs-validation"  method = 'POST' action = "">
     {% csrf_token %}
     <div class="row">
