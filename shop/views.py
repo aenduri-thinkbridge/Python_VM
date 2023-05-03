@@ -1,6 +1,9 @@
 
 from django.contrib.auth.decorators import login_required
 # to remove %20 in the product name
+import time
+from django.views.decorators.cache import never_cache
+
 from .models import costumers
 from django.shortcuts import render
 from django.contrib.auth.models import User
@@ -112,7 +115,8 @@ def redeem_check(code):
     redeem = [i for i in redeem_codes if i == code]
     discount=redeem_codes[redeem[0]]
     return discount
-
+@never_cache
+@login_required(login_url='login')
 def checkout(request):
     submitted = False
 
@@ -127,7 +131,7 @@ def checkout(request):
     context = {'submitted': submitted, 'cart': cart, 'total_items': total_items, 'total_price': total_price}
     #create a session so that data can be retrieved from
     session = request.session
-
+    session.set_expiry(30)
     if request.method == 'POST':
         if 'redeem' in request.POST:
             code = request.POST['code']
@@ -142,10 +146,8 @@ def checkout(request):
             context.update({'discount': discount[1], 'code': code, 'total_price': total_price})
             
             #session objects
-            session['discount'] = discount[1]
-            session['total_price'] = total_price
-            session['code'] = code
-            
+            session_data = {'discount': discount[1], 'code': code, 'total_price': total_price}
+            session['checkout_data'] = session_data
             session.save()
             print('session redeem:',dict(session))
             
@@ -163,6 +165,7 @@ def checkout(request):
             session.save()
             #return redirect('checkout')
             # redirect to checkout page to prevent resubmission on page reload
+    session_data = session.get('checkout_data', {})
     customer_data = session.get('customer_data')
     if customer_data:
         # create and save a Customer object
@@ -183,6 +186,9 @@ def checkout(request):
         context.update({'costumer': customer, 'submitted': submitted})
 
     # Update context with navbar items and render checkout page
+    context.update(session_data)
     context.update(navbar_items(request))
+    context['session_expiry'] = session.get_expiry_age()
+    
     return render(request, 'checkout.html', context)
 
