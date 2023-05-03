@@ -1,6 +1,7 @@
 {%extends 'base.html' %}
 {%load static%}
 {% load mathfilters %}
+{% load tz %}
 
 {%block content%}
 
@@ -71,6 +72,7 @@
     <div class="col-md-8 order-md-1">
       
       <h4 class="mb-3">Billing address</h4>
+      <div id="countdown-timer"></div>
 
 <div>
 <form class="needs-validation" method = "POST" action = "">
@@ -134,7 +136,12 @@
                 </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary" name ='customer_form'>Submit</button>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary" name="customer_form">Submit</button>
+          {%if submitted%}
+          <button type="submit" class="btn btn-secondary" name="clear_form">Clear</button>
+          {% endif %}
+        </div>
       </form>
     </div>
 
@@ -216,7 +223,16 @@
       <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="https://getbootstrap.com/docs/4.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
         <script src="https://getbootstrap.com/docs/4.3/examples/checkout/form-validation.js"></script></body>
 
-
-
+        <script>
+          var countdown = "{{ session_expiry }}";
+          var timer = setInterval(function() {
+            countdown--;
+            document.getElementById('countdown-timer').innerHTML = 'Session expires in ' + countdown + ' seconds';
+            if (countdown <= 0) {
+              clearInterval(timer);
+              document.getElementById('countdown-timer').innerHTML = 'Session has expired';
+            }
+          }, 1000);
+        </script>
 
 {% endblock%}
