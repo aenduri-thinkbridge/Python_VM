@@ -42,3 +42,11 @@ class costumers(models.Model):
     phonenumber = models.TextField() #restriction
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+class Order(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default=None)
+    costumer = models.ForeignKey(costumers,on_delete=models.CASCADE,default=None)
+    cart = models.ForeignKey(Cart,on_delete=models.CASCADE,default=None)
+    def __str__(self):
+        return self.product
+
