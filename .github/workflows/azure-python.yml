@@ -57,5 +57,24 @@ jobs:
           path: |
             .
             !venv/
-
+  deploy:
+      runs-on: self-hosted
+      needs: build
+      
+      steps:
+      
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+         name: python-app
+         path: .
+         
+         
+      - name: Install Azure CLI
+        run: |
+         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+      - name: 'Login via Azure CLI'
+        uses: Azure/login@v1
+        with:
+         creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
