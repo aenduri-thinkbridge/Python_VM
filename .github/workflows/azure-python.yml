@@ -77,4 +77,15 @@ jobs:
         uses: Azure/login@v1
         with:
          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
-
+    
+      - name: Copy application files to Azure VM
+        run: |
+         set -exv
+         echo "${{ secrets.AZURE_VM_DEPLOY_KEY }}" > deploy_key.pem
+         chmod 600 deploy_key.pem
+         sudo scp -o StrictHostKeyChecking=no -i deploy_key.pem -r /home/azureuser/actions-runner/_work/Python_VM/Python_VM /opt/python/
+         
+      - name: Start Application
+        run: |
+         set -exv
+         python3 manage.py runserver 0.0.0.0:8000
