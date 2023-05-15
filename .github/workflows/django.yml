@@ -25,5 +25,5 @@ jobs:
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
-         name: java-app
-         path: '${{ github.workspace }}/target/*.py'
+         name: python-app
+         path: '${{ github.workspace }}/target/'
