@@ -27,6 +27,7 @@
     </style>
     <!-- Custom styles for this template -->
   <body class="bg-light">
+    <form>
     <div class="container">
 
 
@@ -80,7 +81,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="firstName">First name</label>
-                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="" value="{% if submitted %}{{ costumer.first_name }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="" value="{% if submitted %}{{ customer.first_name }}{% endif %}" {% if submitted %}disabled{% endif %} required>
                 <div class="invalid-feedback">
                   Valid first name is required.
                 </div>
@@ -88,7 +89,7 @@
       
               <div class="col-md-6 mb-3">
                 <label for="lastName">Last name</label>
-                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="" value="{% if submitted %}{{ costumer.last_name }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="" value="{% if submitted %}{{ customer.last_name }}{% endif %}" {% if submitted %}disabled{% endif %} required>
                 <div class="invalid-feedback">
                   Valid last name is required.
                 </div>
@@ -98,7 +99,7 @@
       
             <div class="mb-3">
               <label for="address">Address</label>
-              <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" value="{% if submitted %}{{ costumer.address }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+              <input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St" value="{% if submitted %}{{ customer.address }}{% endif %}" {% if submitted %}disabled{% endif %} required>
               <div class="invalid-feedback">
                 Please enter your shipping address.
               </div>
@@ -106,7 +107,7 @@
       
             <div class="mb-3">
               <label for="address">Phone number</label>
-              <input type="text" class="form-control" name="phonenumber" id="address" placeholder="" value="{% if submitted %}{{ costumer.phonenumber }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+              <input type="text" class="form-control" name="phonenumber" id="address" placeholder="" value="{% if submitted %}{{ customer.phonenumber }}{% endif %}" {% if submitted %}disabled{% endif %} required>
               <div class="invalid-feedback">
                 Please give a valid phone number.
               </div>
@@ -116,7 +117,7 @@
               <div class="col-md-5 mb-3">
                 <label for="country">Country</label>
                 <select class="custom-select d-block w-100" name="country" id="country" {% if submitted %}disabled{% endif %}  required>
-                  <option value="">{% if submitted %}{{ costumer.country }}{%else%}Choose...{% endif %}</option>
+                  <option value="">{% if submitted %}{{ customer.country }}{%else%}Choose...{% endif %}</option>
                   <option>United States</option>
                 </select>
                 <div class="invalid-feedback">
@@ -125,12 +126,12 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="city">City</label>
-                <input type="text" class="form-control" name="city" id="city" placeholder="" value="{% if submitted %}{{ costumer.city }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+                <input type="text" class="form-control" name="city" id="city" placeholder="" value="{% if submitted %}{{ customer.city }}{% endif %}" {% if submitted %}disabled{% endif %} required>
       
               </div>
               <div class="col-md-3 mb-3">
                 <label for="zip">Zip</label>
-                <input type="text" class="form-control" name="zipcode" id="zip" placeholder="" value="{% if submitted %}{{ costumer.zipcode }}{% endif %}" {% if submitted %}disabled{% endif %} required>
+                <input type="text" class="form-control" name="zipcode" id="zip" placeholder="" value="{% if submitted %}{{ customer.zipcode }}{% endif %}" {% if submitted %}disabled{% endif %} required>
                 <div class="invalid-feedback">
                   Zip code required.
                 </div>
@@ -160,54 +161,46 @@
 
         <div class="d-block my-3">
           <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked >
             <label class="custom-control-label" for="credit">Credit card</label>
           </div>
           <div class="custom-control custom-radio">
-            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" >
             <label class="custom-control-label" for="debit">Debit card</label>
           </div>
           <div class="custom-control custom-radio">
-            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" >
             <label class="custom-control-label" for="paypal">PayPal</label>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="cc-name">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <input type="text" class="form-control" id="cc-name" placeholder="" >
             <small class="text-muted">Full name as displayed on card</small>
-            <div class="invalid-feedback">
-              Name on card is required
-            </div>
+  
           </div>
           <div class="col-md-6 mb-3">
             <label for="cc-number">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required>
-            <div class="invalid-feedback">
-              Credit card number is required
-            </div>
+            <input type="text" class="form-control" id="cc-number" placeholder="" >
+      
           </div>
         </div>
         <div class="row">
           <div class="col-md-3 mb-3">
             <label for="cc-expiration">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-            <div class="invalid-feedback">
-              Expiration date required
-            </div>
+            <input type="text" class="form-control" id="cc-expiration" placeholder="" >
+  
           </div>
           <div class="col-md-3 mb-3">
             <label for="cc-cvv">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-            <div class="invalid-feedback">
-              Security code required
-            </div>
+            <input type="text" class="form-control" id="cc-cvv" placeholder="" >
+ 
           </div>
         </div>
         <hr class="mb-4">
-        <a href="{% url 'order_confirm'%}">
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+        <a href="{% url 'orders' %}">
+          <button class="btn btn-primary btn-lg btn-block">Continue to checkout</button>
         </a>
     </div>
   </div>

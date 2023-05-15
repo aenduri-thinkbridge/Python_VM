@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 import time
 from django.views.decorators.cache import never_cache
 
-from .models import costumers
+from .models import Customer
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Brand, Category, Product, Cart,Order
-
+from .models import Brand, Category, Product, Cart
 
 def navbar_items(request):
     brand_items = Brand.objects.all()
@@ -169,7 +168,7 @@ def checkout(request):
     customer_data = session.get('customer_data')
     if customer_data:
         # create and save a Customer object
-        customer = costumers.objects.create(
+        customer = Customer.objects.create(
             user=request.user,
             first_name=customer_data['first_name'],
             last_name=customer_data['last_name'],
@@ -183,38 +182,27 @@ def checkout(request):
         # Update context with submitted form information
         customer.save()
         submitted = True
-        context.update({'costumer': customer, 'submitted': submitted})
-        order = Order.objects.create(user= request.user, costumer = customer, cart = cart)
+        context.update({'customer': customer, 'submitted': submitted})
+
+        
 
     # Update context with navbar items and render checkout page
     context.update(session_data)
     context.update(navbar_items(request))
     context['session_expiry'] = session.get_expiry_age()
-    
     return render(request, 'checkout.html', context)
-
-@login_required
-def order_confirm(request):
-    order = Order.objects.get(user=request.user)
-    cart = Cart.objects.filter(user=request.user)
-    total_items = sum([cart_item.quantity for cart_item in cart])
-    total_price = sum([cart_item.product.price * cart_item.quantity for cart_item in cart])
-    context = {'cart': cart, 'total_price': total_price,
-               'total_items': total_items,'orders':order}
-    context.update(navbar_items(request))
-    return render(request, 'cart.html', context)
 
 @login_required(login_url='login')
 def order_view(request):
-    order = Order.objects.get(user=request.user)
-    cart = Cart.objects.filter(user=request.user)
-    costumer = costumer.objects.filter(user=request.user)
-    total_items = sum([cart_item.quantity for cart_item in cart])
-    total_price = sum([cart_item.product.price * cart_item.quantity for cart_item in cart])
-    for i in cart:
-        orders = Order.objects.create(user = request.user,cart = i,costumer = costumer[-1])
-    context = {'cart': cart, 'total_price': total_price,
-               'total_items': total_items,'orders':order}
-    context.update(navbar_items(request))
-    return render(request, 'cart.html', context)
+    session = request.session
+    print(dict(session))
+    """order = Order.objects.filter(user = request.user)
+    order_items = Orderitem.objects.filter(order = order)
+    items = [item.cart for item in order_items]
+    total_items = sum([cart_item.quantity for cart_item in items])
+    total_price = sum([cart_item.product.price * cart_item.quantity for cart_item in items])
+    context = {'cart': items, 'total_price': total_price,
+               'total_items': total_items,'orders':order_items}"""
+    
+    return render(request, 'orderpage.html')
 
