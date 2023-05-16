@@ -84,8 +84,11 @@ jobs:
          echo "${{ secrets.AZURE_VM_DEPLOY_KEY }}" > deploy_key.pem
          chmod 600 deploy_key.pem
          sudo scp -o StrictHostKeyChecking=no -i deploy_key.pem -r /home/azureuser/actions-runner/_work/Python_VM/Python_VM /opt/python/
-         
+      
+      - name: Activate the environment
+        run: |
+         ssh -o StrictHostKeyChecking=no -i deploy_key.pem azureuser@20.121.199.142 'cd /sample/bin source activate'
       - name: Start Application
         run: |
-         set -exv
+         ssh -o StrictHostKeyChecking=no -i deploy_key.pem azureuser@20.121.199.142 'cd /opt/python
          python3 manage.py runserver 0.0.0.0:8000
