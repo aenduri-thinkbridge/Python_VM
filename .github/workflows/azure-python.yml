@@ -86,7 +86,7 @@ jobs:
          sudo scp -o StrictHostKeyChecking=no -i deploy_key.pem -r /home/azureuser/actions-runner/_work/Python_VM/Python_VM /opt/python/
       - name: Activate virtualenv
         run: |
-         . .sample/bin/activate
+         source venv/bin/activate
          pre-commit
             
       - name: Start Application
