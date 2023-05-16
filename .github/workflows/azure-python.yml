@@ -84,10 +84,10 @@ jobs:
          echo "${{ secrets.AZURE_VM_DEPLOY_KEY }}" > deploy_key.pem
          chmod 600 deploy_key.pem
          sudo scp -o StrictHostKeyChecking=no -i deploy_key.pem -r /home/azureuser/actions-runner/_work/Python_VM/Python_VM /opt/python/
-         pwd
-         cd 
-         cd sample/
-         source sample/bin/activate
+      - name: Activate virtualenv
+        run: |
+         . .sample/bin/activate
+         pre-commit
             
       - name: Start Application
         run: |
