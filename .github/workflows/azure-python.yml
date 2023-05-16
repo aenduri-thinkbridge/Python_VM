@@ -87,7 +87,7 @@ jobs:
          pwd
          cd 
          cd sample/
-         source bin/activate
+         source sample/bin/activate
             
       - name: Start Application
         run: |
